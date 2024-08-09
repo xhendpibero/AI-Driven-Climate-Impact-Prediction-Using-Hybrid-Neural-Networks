@@ -1,4 +1,4 @@
-# AI-Driven Climate Impact Prediction Using Hybrid Neural Networks
+# Quantum AI-Driven Climate Impact Prediction Using Hybrid Neural Networks
 
 ## Overview
 This project aims to leverage AI and machine learning to predict and analyze the impact of climate change on global parameters such as temperature, sea levels, and extreme weather events. The goal is to develop a hybrid neural network model that combines classical deep learning with advanced machine learning techniques to process and analyze large-scale climate datasets. This predictive model will contribute to understanding and mitigating the effects of climate change.
