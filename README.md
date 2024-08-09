@@ -3,6 +3,11 @@
 ## Overview
 This project aims to leverage AI and machine learning to predict and analyze the impact of climate change on global parameters such as temperature, sea levels, and extreme weather events. The goal is to develop a hybrid neural network model that combines classical deep learning with advanced machine learning techniques to process and analyze large-scale climate datasets. This predictive model will contribute to understanding and mitigating the effects of climate change.
 
+Team Members:
+ - Dendy SA (Lead Developer)
+ - Me and
+ - Myself
+
 ## Table of Contents
 - Overview
 - Project Structure
@@ -13,6 +18,7 @@ This project aims to leverage AI and machine learning to predict and analyze the
 - License
 
 ## Project Structure
+```
 AI-Driven-Climate-Impact-Prediction/
 ├── data/
 │   ├── raw/                # Raw climate datasets
@@ -31,7 +37,7 @@ AI-Driven-Climate-Impact-Prediction/
 │   └── figures/            # Visualizations and figures generated during analysis
 ├── README.md
 └── requirements.txt        # Required Python packages and dependencies
-
+```
 # Getting Started
 ## Prerequisites
  - Python 3.8+
@@ -41,11 +47,15 @@ AI-Driven-Climate-Impact-Prediction/
 
 ## Installation
 1. Clone the repository:
+```
 git clone https://github.com/yourusername/AI-Driven-Climate-Impact-Prediction.git
 cd AI-Driven-Climate-Impact-Prediction
+```
 
 2. Install the required dependencies:
+```
 pip install -r requirements.txt
+```
 
 3. Set up and preprocess the data:
  - Download climate datasets from external sources (NOAA, NASA).
@@ -84,7 +94,8 @@ Generate reports and share findings with the scientific community.
 ## Results
 The final model and results will be documented in the final_report.md file.
 Visualizations and analysis will be available in the reports/figures/ directory.
-Contributing
+
+## Contributing
 We welcome contributions to improve the project. Please follow the standard GitHub Flow and submit a pull request for any enhancements or bug fixes.
 
 ## License
