@@ -13,6 +13,9 @@ y = np.load(os.path.join(data_dir, 'y.npy'))  # Load the actual data from y.npy
 # Train the model
 params = train_quantum_model(x, y, num_epochs=1000, lr=0.1)
 
+if params is None:
+    raise ValueError("Training did not return any parameters. Please check the training process.")
+
 # Save trained parameters
 np.save(os.path.join(data_dir, 'params.npy'), params)
 

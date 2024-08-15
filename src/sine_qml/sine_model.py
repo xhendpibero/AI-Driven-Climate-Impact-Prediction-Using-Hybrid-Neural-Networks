@@ -40,8 +40,15 @@ def train_quantum_model(x, y, num_epochs=1000, lr=0.1):
             # Ensure the cost function output is a scalar
             cost = cost_function(params, x, y)
             print(f"Epoch {epoch}: Cost = {cost}")
+    
+    return params  # Make sure to return the final optimized parameters
+
 
 def predict_quantum_model(params, x):
+    if params is None:
+        raise ValueError("The parameter array 'params' is None. Ensure that the training function is returning the parameters correctly.")
+    
     circuit = create_quantum_circuit(params)
     predictions = pnp.array([circuit([x_i, params[1]]) for x_i in x])
     return predictions
+
