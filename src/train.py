@@ -18,10 +18,15 @@ def main():
     q_train_images = np.load(SAVE_PATH + "q_train_images.npy")
     q_test_images = np.load(SAVE_PATH + "q_test_images.npy")
     (train_images, train_labels), (test_images, test_labels) = keras.datasets.mnist.load_data()
+    
+    # Reduce labels to match the size of the images
     train_images = train_images[:n_train] / 255.0
     test_images = test_images[:n_test] / 255.0
-    train_images = train_images[..., keras.backend.newaxis]
-    test_images = test_images[..., keras.backend.newaxis]
+    train_labels = train_labels[:n_train]
+    test_labels = test_labels[:n_test]
+    
+    train_images = train_images[..., np.newaxis]
+    test_images = test_images[..., np.newaxis]
 
     q_model = MyModel()
     q_history = q_model.fit(
