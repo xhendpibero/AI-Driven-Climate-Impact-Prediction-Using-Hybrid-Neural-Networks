@@ -1,9 +1,15 @@
+import os
 import numpy as np
 from .mnist_loader import load_mnist_data
 from ..quantum.circuit import quanv
 
 def preprocess_and_save(SAVE_PATH, n_train=50, n_test=30):
     """Quantum pre-processing of images and saving the results."""
+    
+    # Ensure the save path directory exists
+    if not os.path.exists(SAVE_PATH):
+        os.makedirs(SAVE_PATH)
+
     (train_images, train_labels), (test_images, test_labels) = load_mnist_data(n_train, n_test)
     
     q_train_images = []
@@ -21,5 +27,5 @@ def preprocess_and_save(SAVE_PATH, n_train=50, n_test=30):
     q_test_images = np.asarray(q_test_images)
 
     # Save pre-processed images
-    np.save(SAVE_PATH + "q_train_images.npy", q_train_images)
-    np.save(SAVE_PATH + "q_test_images.npy", q_test_images)
+    np.save(os.path.join(SAVE_PATH, "q_train_images.npy"), q_train_images)
+    np.save(os.path.join(SAVE_PATH, "q_test_images.npy"), q_test_images)
