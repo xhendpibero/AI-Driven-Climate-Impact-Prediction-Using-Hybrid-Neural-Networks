@@ -1,29 +1,29 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from .sine_data import generate_sine_data
-from .sine_model import create_qml_model
+import tensorflow as tf
+from src.sine_qml.sine_data import generate_sine_data
+from src.sine_qml.sine_model import SineModel
+from src.sine_qml.sine_plotting import plot_sine_predictions
 
 def main():
-    # Generate sine data
-    x_values, y_values = generate_sine_data(n_points=100)
+    # Generate data
+    X, y = generate_sine_data(n_points=100)
     
-    # Reshape data to match input shape
-    x_values_reshaped = x_values.reshape(-1, 1)
-    y_values_reshaped = y_values.reshape(-1, 1)
-
-    # Create the QML model
-    qml_model = create_qml_model()
-
+    # Convert data to TensorFlow tensors
+    X = tf.convert_to_tensor(X, dtype=tf.float32)
+    y = tf.convert_to_tensor(y, dtype=tf.float32)
+    
+    # Initialize and compile the model
+    model = SineModel()
+    model.compile(optimizer='adam', loss='mean_squared_error')
+    
     # Train the model
-    qml_model.fit(x_values_reshaped, y_values_reshaped, epochs=100, batch_size=10)
-
-    # Predict and plot the results
-    y_pred = qml_model.predict(x_values_reshaped)
-
-    plt.plot(x_values, y_values, label="Original Sine Function")
-    plt.plot(x_values, y_pred, label="QML Model Predictions", linestyle='--')
-    plt.legend()
-    plt.show()
+    model.fit(X, y, epochs=100, batch_size=10, verbose=1)
+    
+    # Predict using the trained model
+    y_pred = model(X)
+    
+    # Plot the results
+    plot_sine_predictions(X.numpy(), y.numpy(), y_pred.numpy())
 
 if __name__ == "__main__":
     main()
