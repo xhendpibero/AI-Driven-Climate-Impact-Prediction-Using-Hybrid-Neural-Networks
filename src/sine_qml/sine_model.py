@@ -1,46 +1,47 @@
 import pennylane as qml
-from pennylane import numpy as np
-import tensorflow as tf
-from tensorflow import keras
+from pennylane import numpy as pnp
 
-# Initialize the quantum device globally
-dev = qml.device("default.qubit", wires=2)
+# Define the quantum circuit
+def create_quantum_circuit(params):
+    dev = qml.device("default.qubit", wires=1)
 
-@qml.qnode(dev)
-def sine_circuit(params, x):
-    """Quantum circuit to learn the sine function."""
-    qml.RX(x, wires=0)
-    qml.RY(params[0], wires=0)
-    qml.RX(params[1], wires=1)
-    qml.CNOT(wires=[0, 1])
-    qml.RZ(params[2], wires=1)
-    return qml.expval(qml.PauliZ(1))
+    @qml.qnode(dev)
+    def circuit(params):
+        qml.RX(params[0], wires=0)
+        qml.RZ(params[1], wires=0)
+        return qml.expval(qml.PauliZ(0))
 
-class SineModel(keras.Model):
-    def __init__(self, n_layers=3):
-        super(SineModel, self).__init__()
-        self.params = tf.Variable(np.random.uniform(0, np.pi, (n_layers, 3)), trainable=True)
-        self.n_layers = n_layers
+    return circuit
 
-    def call(self, inputs):
-        """Forward pass through the quantum model."""
-        def circuit_apply(x):
-            """Applies the quantum circuit for each input."""
-            outputs = []
-            for i in range(self.n_layers):
-                q_result = sine_circuit(self.params[i], x)
-                outputs.append(q_result)
-            return tf.stack(outputs)
-        
-        return tf.map_fn(circuit_apply, inputs)
+# Define the cost function
+def cost_function(params, x, y):
+    # Ensure params is a Pennylane-compatible array
+    params = pnp.asarray(params, dtype=float)
     
-    def train_step(self, data):
-        """Custom training step to update quantum circuit parameters."""
-        X, y = data
-        with tf.GradientTape() as tape:
-            predictions = self(X, training=True)
-            loss = self.compiled_loss(y, predictions)
-        
-        gradients = tape.gradient(loss, [self.params])
-        self.optimizer.apply_gradients(zip(gradients, [self.params]))
-        return {"loss": loss}
+    # Ensure x is a Pennylane-compatible array
+    x = pnp.asarray(x, dtype=float)
+    y = pnp.asarray(y, dtype=float)
+
+    circuit = create_quantum_circuit(params)
+    predictions = pnp.array([circuit([x_i, params[1]]) for x_i in x])
+    
+    return pnp.mean((predictions - y) ** 2)
+
+# Define the training function
+def train_quantum_model(x, y, num_epochs=1000, lr=0.1):
+    params = pnp.array([0.1, 0.1], dtype=float)  # Initial parameters
+    
+    opt = qml.GradientDescentOptimizer(lr)
+    
+    for epoch in range(num_epochs):
+        # Use a lambda function to pass params to the cost_function
+        params = opt.step(lambda p: cost_function(p, x, y), params)
+        if epoch % 100 == 0:
+            # Ensure the cost function output is a scalar
+            cost = cost_function(params, x, y)
+            print(f"Epoch {epoch}: Cost = {cost}")
+
+def predict_quantum_model(params, x):
+    circuit = create_quantum_circuit(params)
+    predictions = pnp.array([circuit([x_i, params[1]]) for x_i in x])
+    return predictions
